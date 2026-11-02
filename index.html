@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>إلى خواتي.. الخوتة والهبلة | من أخوكم وتاج راسكم 😎</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Tajawal & Amiri -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Tajawal', 'sans-serif'],
+            serif: ['Amiri', 'serif'],
+          },
+          colors: {
+            sedra: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+            },
+            lilas: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f9a8d4',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              800: '#9d174d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --theme-primary: #e11d48;
+      --theme-secondary: #f43f5e;
+      --theme-bg-soft: #fff1f2;
+      --theme-border: #fecdd3;
+      --theme-badge: #ffe4e6;
+      --theme-text: #9f1239;
+    }
+
+    body.theme-lilas {
+      --theme-primary: #db2777;
+      --theme-secondary: #ec4899;
+      --theme-bg-soft: #fdf2f8;
+      --theme-border: #fbcfe8;
+      --theme-badge: #fce7f3;
+      --theme-text: #9d174d;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(160deg, var(--theme-bg-soft) 0%, #ffffff 50%, var(--theme-bg-soft) 100%);
+      color: #1f2937;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.6s ease;
+    }
+
+    /* Background Canvas for Falling Flowers */
+    #flower-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Interactive 3D Envelope Styles */
+    .envelope-scene {
+      perspective: 1200px;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      margin: 0 auto;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @media (min-width: 640px) {
+      .envelope-wrapper {
+        width: 370px;
+        height: 250px;
+      }
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    .envelope-back {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #be123c, #e11d48);
+      border-radius: 18px;
+      box-shadow: 0 25px 50px -12px rgba(225, 29, 72, 0.35);
+    }
+
+    .envelope-letter {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 16px;
+      bottom: 16px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      z-index: 2;
+      transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffe4e6;
+    }
+
+    .envelope-wrapper.open .envelope-letter {
+      transform: translateY(-120px) scale(1.03);
+      z-index: 6;
+    }
+
+    .envelope-front-Pocket {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      border-radius: 18px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-front-Pocket::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #f43f5e 45%, #e11d48 100%);
+      clip-path: polygon(0 28%, 50% 62%, 100% 28%, 100% 100%, 0 100%);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 135px;
+      background: linear-gradient(180deg, #fb7185, #e11d48);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.3s;
+      z-index: 4;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+
+    .envelope-wrapper.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+      border: 3px solid #fecdd3;
+      box-shadow: 0 10px 25px rgba(159, 18, 57, 0.28);
+      border-radius: 9999px;
+      padding: 10px 22px;
+      text-align: center;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      min-width: 215px;
+    }
+
+    .envelope-wrapper.open .wax-seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.7);
+      pointer-events: none;
+    }
+
+    /* 3D Flip Cards */
+    .flip-card {
+      perspective: 1000px;
+      height: 195px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.65s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Typewriter Cursor */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1.2em;
+      background-color: var(--theme-primary);
+      margin-right: 4px;
+      vertical-align: middle;
+      animation: blink 0.85s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Shake Animation for Wrong Password */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .shake-error {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    /* Certificate ornate border */
+    .certificate-frame {
+      background-image: radial-gradient(rgba(225, 29, 72, 0.05) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+  </style>
+</head>
+<body class="selection:bg-rose-200 selection:text-rose-900">
+
+  <!-- Dynamic Falling Flowers Canvas (Mini Carnations for Sedra / Baby Roses for Lilas) -->
+  <canvas id="flower-canvas"></canvas>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300 bg-gray-900/95 text-white px-5 py-3 rounded-2xl shadow-xl text-sm font-bold flex items-center gap-2.5 border border-white/15">
+    <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+    <span id="toast-text">تم النسخ بنجاح!</span>
+  </div>
+
+  <!-- =====================================================
+       1. INTERACTIVE ENVELOPE SPLASH SCREEN (شاشة البداية)
+       ===================================================== -->
+  <div id="splash-screen" class="fixed inset-0 z-40 flex flex-col items-center justify-center px-4 bg-gradient-to-br from-rose-50 via-white to-pink-50 transition-opacity duration-700">
+    <!-- Subtle decorative circles -->
+    <div class="absolute top-10 right-10 w-44 h-44 bg-rose-200/40 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-10 left-10 w-56 h-56 bg-pink-200/40 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="text-center max-w-md mx-auto mb-10 relative z-10">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200 mb-3 shadow-sm">
+        <svg class="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        بريد أخوي مستعجل وهام
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+        وصلتكم رسالة مفاجئة!
+      </h1>
+      <p class="text-sm text-gray-600 mt-1.5">
+        اضغطوا على الظرف لفتح الرسالة والدخول للموقع
+      </p>
+    </div>
+
+    <!-- 3D Envelope -->
+    <div class="envelope-scene my-4 relative z-10">
+      <div id="envelope-box" class="envelope-wrapper" onclick="openEnvelope()" role="button" tabindex="0" aria-label="افتح الرسالة">
+        <div class="envelope-back"></div>
+
+        <!-- Sliding Letter Inside -->
+        <div class="envelope-letter">
+          <p class="text-xs font-bold text-rose-600 mb-1">إلى: سدرة (الخوتة) & ليلاس (الهبلة)</p>
+          <p class="text-sm font-extrabold text-gray-800 leading-snug">
+            تم تجهيز هذا الموقع الرسمي لتوثيق فضلي عليكم.. تفضلوا بالدخول!
+          </p>
+          <span class="mt-2 inline-block text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+            من أخوكم وتاج راسكم 😎
+          </span>
+        </div>
+
+        <div class="envelope-front-Pocket"></div>
+        <div class="envelope-flap"></div>
+
+        <!-- Seal Badge -->
+        <div class="wax-seal">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-rose-600 mb-0.5 flex items-center justify-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            رسالة خاصة جداً
+          </div>
+          <div class="text-sm font-black text-gray-900">
+            من أخوكم وتاج راسكم 😎
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="openEnvelope()" class="mt-8 relative z-10 inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-bold text-sm shadow-lg shadow-rose-600/25 transition-all">
+      <span>اضغطي هنا لفتح الظرف</span>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- =====================================================
+       MAIN APPLICATION CONTENT
+       ===================================================== -->
+  <main id="main-app" class="relative z-10 max-w-2xl mx-auto px-4 pt-6 pb-20 opacity-0 transition-opacity duration-700">
+
+    <!-- 2. MAIN HEADER & GENERAL INTRO MESSAGE -->
+    <header class="text-center mb-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur border border-rose-200 shadow-sm text-xs font-bold text-rose-700 mb-3">
+        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        <span id="flower-indicator-text">تساقط زهور ميني قرنفل لسدرة</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight">
+        إلى خواتي.. الخوتة والهبلة
+      </h1>
+      <p class="text-sm sm:text-base font-medium text-gray-600 mt-1.5">
+        موقع رسمي لتوثيق فضلي عليكم وشكر خفيف عالطاير
+      </p>
+    </header>
+
+    <!-- General Intro Card (رسالة عامة مشتركة) -->
+    <section class="bg-white/90 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-md border border-rose-100 mb-6 relative overflow-hidden">
+      <div class="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-gray-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-gray-900">بيان هام للثنائي المرح</h2>
+            <p class="text-xs text-gray-500">اقرؤوا المقدمة قبل ما تدخلون أقسامكم</p>
+          </div>
+        </div>
+        <span class="text-xs font-extrabold px-3 py-1.5 rounded-full bg-gray-900 text-white shrink-0">
+          من أخوكم وتاج راسكم 😎
+        </span>
+      </div>
+
+      <p class="text-gray-700 text-sm sm:text-base leading-relaxed font-medium">
+        بصراحة ما في مناسبة ولا شي، بس قلت أسوي لكم هالموقع كمفاجأة عشان أذكركم إن وجودي بحياتكم هو أكبر جائزة ممكن تفوزوا فيها. صح وحدة فيكم خوتة ومستعجلة عالدنيا، والثانية هبلة وفاصلة، وصح إني ما تعلمت منكم شي بالحياة بل أنا اللي علمتكم كل شي.. بس يلا، البيت بدون إزعاجكم ما يسوى. اختاروا اسمكم من فوق وحطوا كلمة السر عشان تشوفوا فضايحكم.. قصدي رسائلكم الخاصة!
+      </p>
+    </section>
+
+    <!-- 3. TOP SISTER SWITCHER (التنقل بين سدرة وليلاس) -->
+    <div class="sticky top-3 z-30 bg-white/95 backdrop-blur-md p-1.5 rounded-2xl shadow-lg border border-gray-200/80 mb-6 flex gap-2">
+      <button
+        id="tab-sedra"
+        onclick="switchSister('sedra')"
+        class="flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-rose-600 text-white shadow-md shadow-rose-600/25"
+      >
+        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span>قسم سدرة (الخوتة)</span>
+      </button>
+
+      <button
+        id="tab-lilas"
+        onclick="switchSister('lilas')"
+        class="flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 text-gray-600 hover:bg-pink-50"
+      >
+        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+        </svg>
+        <span>قسم ليلاس (الهبلة)</span>
+      </button>
+    </div>
+
+    <!-- =====================================================
+         SECTION A: SEDRA (قسم سدرة - الخوتة)
+         ===================================================== -->
+    <div id="section-sedra" class="space-y-6">
+
+      <!-- 4A. Sedra Password Lock Card -->
+      <div id="lock-sedra" class="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-lg border-2 border-rose-100 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 mx-auto flex items-center justify-center text-rose-600 mb-4 shadow-sm">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+
+        <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-bold mb-2">
+          منطقة خاصة بسدرة فقط
+        </span>
+        <h2 class="text-xl sm:text-2xl font-black text-gray-900">
+          أهلاً بالخوتة سدرة!
+        </h2>
+        <p class="text-sm text-gray-600 mt-1 max-w-sm mx-auto">
+          هدي السرعة شوي واكتبي كلمة السر الخاصة فيكِ عشان تفتحين رسالتك وشهادتك الرسمية
+        </p>
+
+        <form onsubmit="event.preventDefault(); unlockSister('sedra');" class="mt-5 max-w-xs mx-auto space-y-3">
+          <div>
+            <input
+              id="input-pass-sedra"
+              type="text"
+              dir="ltr"
+              placeholder="2008/1/10"
+              autocomplete="off"
+              class="w-full text-center font-bold text-lg tracking-wider py-3 px-4 rounded-2xl border-2 border-rose-200 focus:border-rose-600 focus:outline-none bg-rose-50/40 text-gray-900 transition-colors"
+            />
+            <p class="text-xs text-gray-500 mt-2 font-medium">
+              تلميح: تاريخ ميلادك بالصيغة <span dir="ltr" class="font-bold text-rose-700">2008/1/10</span>
+            </p>
+          </div>
+
+          <p id="error-sedra" class="text-xs font-bold text-red-600 hidden">
+            كلمة السر غلط يا مستعجلة! ركزي واكتبي 2008/1/10
+          </p>
+
+          <button
+            type="submit"
+            class="w-full py-3.5 px-6 rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-extrabold text-sm shadow-md shadow-rose-600/25 transition-all flex items-center justify-center gap-2"
+          >
+            <span>فتح قسم سدرة</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- 5. Sedra Unlocked Content -->
+      <div id="content-sedra" class="hidden space-y-6">
+
+        <!-- Custom SVG Avatar & Identity Header -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100 text-center relative overflow-hidden">
+          <div class="w-32 h-32 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-rose-100 via-rose-50 to-amber-50 border-2 border-rose-200 flex items-center justify-center shadow-inner relative">
+            <!-- Custom SVG Illustration: Multi-talented Sedra (Pipe-cleaner cotton flowers, needle & thread, paintbrush) -->
+            <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Soft background circle -->
+              <circle cx="60" cy="60" r="46" fill="#FFE4E6" />
+              <!-- Pipe-cleaner fuzzy flower (ورد أسياخ القطن الملون) on left -->
+              <line x1="28" y1="95" x2="34" y2="52" stroke="#15803D" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="34" cy="44" r="9" fill="#FB7185" />
+              <circle cx="27" cy="39" r="6" fill="#F43F5E" />
+              <circle cx="41" cy="39" r="6" fill="#F43F5E" />
+              <circle cx="29" cy="50" r="6" fill="#FDA4AF" />
+              <circle cx="39" cy="50" r="6" fill="#FDA4AF" />
+              <circle cx="34" cy="44" r="4" fill="#FDE047" />
+
+              <!-- Paintbrush on right -->
+              <path d="M88 92L82 54" stroke="#B45309" stroke-width="4" stroke-linecap="round"/>
+              <path d="M82 54C78 46 84 36 89 34C92 40 91 49 82 54Z" fill="#E11D48"/>
+
+              <!-- Sewing needle & thread arc -->
+              <path d="M22 28C45 14 75 14 96 28" stroke="#F43F5E" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round"/>
+
+              <!-- Cheerful Artist Girl Avatar Center -->
+              <circle cx="60" cy="63" r="22" fill="#FDE68A" stroke="#F59E0B" stroke-width="2"/>
+              <!-- Hair / Headscarf stylish wave -->
+              <path d="M38 60C38 44 48 36 60 36C72 36 82 44 82 60C77 52 69 49 60 49C51 49 43 52 38 60Z" fill="#9F1239"/>
+              <!-- Happy Eyes -->
+              <path d="M51 61C52.5 59 54.5 59 56 61" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M64 61C65.5 59 67.5 59 69 61" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Rosy cheeks -->
+              <circle cx="48" cy="66" r="3.5" fill="#FB7185" opacity="0.6"/>
+              <circle cx="72" cy="66" r="3.5" fill="#FB7185" opacity="0.6"/>
+              <!-- Confident smile -->
+              <path d="M54 69C56.5 73 63.5 73 66 69" stroke="#9F1239" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Speed lines to show she is always in a hurry -->
+              <path d="M14 60H24" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18 68H26" stroke="#FB7185" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900">
+            سدرة | اللقب الرسمي: الخوتة
+          </h2>
+
+          <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <!-- Key Trait Badge -->
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200">
+              <svg class="w-4 h-4 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              وسام الصفة الأبرز: أسرع كائن بالكوكب — مستعجلة دائماً حتى وهي قاعدة
+            </span>
+
+            <!-- University Status Badge -->
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-200">
+              <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+              </svg>
+              بانتظار نتائج مفاضلة الجامعة
+            </span>
+          </div>
+        </div>
+
+        <!-- Personal Letter with Typewriter Effect -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-rose-100">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-600"></span>
+              <h3 class="font-extrabold text-gray-900 text-lg">رسالتك الخاصة يا سدرة</h3>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="startTypewriter('sedra', false)" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition">
+                إعادة كتابة
+              </button>
+              <button onclick="startTypewriter('sedra', true)" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                عرض الكامل
+              </button>
+            </div>
+          </div>
+
+          <div class="min-h-[150px] bg-rose-50/50 rounded-2xl p-4 sm:p-5 border border-rose-100">
+            <p id="typewriter-sedra" class="text-gray-800 text-base sm:text-lg leading-relaxed font-medium"></p>
+          </div>
+
+          <div class="mt-4 flex items-center justify-end">
+            <span class="text-xs font-black text-rose-800 bg-rose-100 px-3.5 py-1.5 rounded-full">
+              التوقيع: أخوكِ وتاج راسك 😎
+            </span>
+          </div>
+        </div>
+
+        <!-- Age Difference Counter (عداد فرق العمر والخبرة) -->
+        <div class="bg-gradient-to-br from-rose-600 to-rose-700 text-white rounded-3xl p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-extrabold flex items-center gap-2">
+              <svg class="w-5 h-5 text-rose-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              عداد فرق العمر والأقدمية
+            </h3>
+            <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-bold" dir="ltr">
+              2006/10/7 vs 2008/1/10
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 my-4 text-center">
+            <div class="bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-2xl sm:text-3xl font-black">1 سنة و 95 يوم</div>
+              <div class="text-xs text-rose-100 mt-1 font-medium">فرق العمر بالسنة واليوم</div>
+            </div>
+            <div class="bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-2xl sm:text-3xl font-black">460 يوم</div>
+              <div class="text-xs text-rose-100 mt-1 font-medium">إجمالي أيام الخبرة الزائدة</div>
+            </div>
+            <div class="col-span-2 sm:col-span-1 bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-xl sm:text-2xl font-black">1 سنة و 3 أشهر و 3 أيام</div>
+              <div class="text-xs text-rose-100 mt-1 font-medium">التفصيل الدقيق للأقدمية</div>
+            </div>
+          </div>
+
+          <p class="text-xs sm:text-sm text-rose-100 font-bold text-center bg-black/15 rounded-xl py-2.5 px-3">
+            فرق العمر اللي يثبت رسمياً إني المصدر الأول للخبرة والحكمة بهالبيت وإنك ما علمتيني شي أنا اللي علمتك!
+          </p>
+        </div>
+
+        <!-- Hobbies & Talents Card (هوايات بتاخذ من كل شي شوي) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100">
+          <h3 class="text-lg font-extrabold text-gray-900 mb-1 flex items-center gap-2">
+            <svg class="w-5 h-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            مواهب سدرة (تأخذ من كل شي شوي وتبدع فيه)
+          </h3>
+          <p class="text-xs text-gray-500 mb-4">فنانة شاملة رغم الاستعجال الدائم</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <!-- Hobby 1: Pipe-cleaner cotton flowers -->
+            <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-100 flex flex-col items-start">
+              <div class="w-11 h-11 rounded-xl bg-white border border-rose-200 flex items-center justify-center text-rose-600 mb-3 shadow-sm">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="9" r="3" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a3 3 0 00-2.5 4.5A3 3 0 0012 12a3 3 0 002.5-4.5A3 3 0 0012 3z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.5a3 3 0 00-1.5 5.2A3 3 0 0012 12m3-5.5a3 3 0 011.5 5.2A3 3 0 0112 12m0 0v9m0-4l3-2m-3 2l-3-2" />
+                </svg>
+              </div>
+              <h4 class="font-extrabold text-gray-900 text-sm mb-1">صناعة ورد القطن الملون</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">
+                تحويل أسياخ الحديد والقطن الملون لباقات ورد يدوية تفتح النفس وكأنها جاهزة.
+              </p>
+            </div>
+
+            <!-- Hobby 2: Sewing -->
+            <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-100 flex flex-col items-start">
+              <div class="w-11 h-11 rounded-xl bg-white border border-rose-200 flex items-center justify-center text-rose-600 mb-3 shadow-sm">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 5L5 19M17.5 3.5a2.121 2.121 0 013 3L7 20l-4 1 1-4L17.5 3.5z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 7c2 3 5 3 7 1" />
+                </svg>
+              </div>
+              <h4 class="font-extrabold text-gray-900 text-sm mb-1">الخياطة والتصميم</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">
+                تعرف تخيط وترتب التفاصيل اليدوية بدقة عالية حتى وهي مستعجلة.
+              </p>
+            </div>
+
+            <!-- Hobby 3: Drawing -->
+            <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-100 flex flex-col items-start">
+              <div class="w-11 h-11 rounded-xl bg-white border border-rose-200 flex items-center justify-center text-rose-600 mb-3 shadow-sm">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h4 class="font-extrabold text-gray-900 text-sm mb-1">الرسم الفني</h4>
+              <p class="text-xs text-gray-600 leading-relaxed">
+                حس فني وذوق عالي يظهر بكل رسمة أو فكرة تشتغل عليها.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Flip Cards (أسباب تخليني فخور فيكِ) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-extrabold text-gray-900">أسباب تخليني فخور فيكِ</h3>
+              <p class="text-xs text-gray-500">اضغطي على أي بطاقة عشان تنقلب وتشوفين السبب</p>
+            </div>
+            <span class="text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
+              3 بطاقات تفاعلية
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <!-- Flip Card 1 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-rose-50 to-pink-50 border-2 border-rose-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-rose-600 text-white font-black text-sm flex items-center justify-center mb-2">1</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الأول: تعدد المواهب</h4>
+                  <span class="mt-3 text-xs font-bold text-rose-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-rose-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأنك ما تخلين شغلة ببالك إلا وتجربيها وتنجحي فيها من خياطة ورسم وأشغال يدوية وورد قطن ملون.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flip Card 2 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-rose-50 to-pink-50 border-2 border-rose-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-rose-600 text-white font-black text-sm flex items-center justify-center mb-2">2</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الثاني: السرعة القياسية</h4>
+                  <span class="mt-3 text-xs font-bold text-rose-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-rose-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأنك تخلصين مهام أسبوع كامل بنص ساعة (صح نصها عالسريع لأنك خوتة بس النتيجة تطلع رهيبة).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flip Card 3 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-rose-50 to-pink-50 border-2 border-rose-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-rose-600 text-white font-black text-sm flex items-center justify-center mb-2">3</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الثالث: طالبتنا الجامعية</h4>
+                  <span class="mt-3 text-xs font-bold text-rose-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-rose-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأنك كبرتي وصرتي عأبواب الجامعة، ورافعين راسنا فيكِ من قبل ما تطلع نتائج المفاضلة.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate of Appreciation (شهادة تقدير رسمية لسدرة) -->
+        <div class="certificate-frame bg-white rounded-3xl p-6 sm:p-8 shadow-md border-4 border-double border-rose-300 text-center relative">
+          <div class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-extrabold mb-3">
+            شهادة تقدير أخوية معتمدة
+          </div>
+          <h3 class="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            وسام الشكر والتميز الرسمي
+          </h3>
+          <p class="text-sm text-gray-600 mb-3">
+            يمنح هذا الوسام الفخري بكل فخر واعتزاز إلى الأخت:
+          </p>
+          <div class="inline-block px-6 py-2 rounded-2xl bg-rose-50 border border-rose-200 text-xl sm:text-2xl font-black text-rose-700 mb-3">
+            سدرة الخوتة
+          </div>
+          <p class="font-serif text-base sm:text-lg text-gray-700 max-w-md mx-auto leading-relaxed">
+            وذلك لحصولها بجدارة على لقب <span class="font-bold text-rose-700">"أسرع فنانة شاملة ومهندسة الورود القطنية في العائلة"</span>، مع تمنياتنا الكاملة لها بالتوفيق في مفاضلة الجامعة.
+          </p>
+          <div class="mt-5 pt-4 border-t border-rose-100 flex items-center justify-between text-xs font-bold text-gray-600">
+            <span>الختم الرسمي: معتمد 100%</span>
+            <span class="text-rose-800 font-black">التوقيع: أخوكِ وتاج راسك 😎</span>
+          </div>
+        </div>
+
+        <!-- Heartfelt Prayer (دعاء خاص لسدرة) -->
+        <div class="bg-gradient-to-r from-rose-50 via-white to-rose-50 rounded-3xl p-6 shadow-sm border border-rose-200 text-center">
+          <span class="text-xs font-extrabold text-rose-700 uppercase tracking-wider">دعاء من القلب</span>
+          <p class="font-serif text-lg sm:text-xl text-gray-800 mt-2 leading-loose font-bold">
+            "اللهم اكتب لسدرة الخير والتوفيق في مفاضلتها الجامعية، واختَر لها التخصص الذي يرضي طموحها ويسعد قلبها، وبارك في يدها المبدعة واجعل أيامها القادمة مليئة بالنجاح والفرح."
+          </p>
+        </div>
+
+        <!-- Live Birthday Countdown (العد التنازلي ليوم ميلاد سدرة 10/1) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100 text-center">
+          <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-bold mb-2">
+            موعدنا يوم 10 يناير (2008/1/10)
+          </span>
+          <h3 class="text-lg font-extrabold text-gray-900 mb-4">
+            العد التنازلي ليوم ميلادك القادم
+          </h3>
+
+          <div class="grid grid-cols-4 gap-2.5 max-w-md mx-auto mb-4">
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3">
+              <div id="sedra-days" class="text-2xl sm:text-3xl font-black text-rose-700">0</div>
+              <div class="text-xs font-bold text-gray-600">يوم</div>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3">
+              <div id="sedra-hours" class="text-2xl sm:text-3xl font-black text-rose-700">0</div>
+              <div class="text-xs font-bold text-gray-600">ساعة</div>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3">
+              <div id="sedra-mins" class="text-2xl sm:text-3xl font-black text-rose-700">0</div>
+              <div class="text-xs font-bold text-gray-600">دقيقة</div>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3">
+              <div id="sedra-secs" class="text-2xl sm:text-3xl font-black text-rose-700">0</div>
+              <div class="text-xs font-bold text-gray-600">ثانية</div>
+            </div>
+          </div>
+
+          <div class="bg-rose-600 text-white rounded-2xl p-3.5 text-xs sm:text-sm font-bold shadow-sm">
+            انتظري هديتك بيوم ميلادك.. (مع إن وجود أخ مثلي بحياتك هو أكبر جائزة ومو محتاجة هدية أصلاً 😎)
+          </div>
+        </div>
+
+        <!-- Direct WhatsApp Reply Box for Sedra -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-rose-100">
+          <h3 class="text-lg font-extrabold text-gray-900 mb-1">
+            ردي على أخوكِ وتاج راسك 😎
+          </h3>
+          <p class="text-xs text-gray-500 mb-3">
+            اكتبي ردك هون ورح يوصله مباشرة عالواتساب
+          </p>
+
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <button type="button" onclick="fillReply('sedra', 'أحلى مفاجأة والله! بس لا تصدق حالك كثير إني ما علمتك شي 😂')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 px-3 py-1.5 rounded-xl font-bold transition">
+              رد سريع: أحلى مفاجأة!
+            </button>
+            <button type="button" onclick="fillReply('sedra', 'شكراً يا تاج راسي، بس تذكر وعد الهدية بيوم ميلادي 10/1!')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 px-3 py-1.5 rounded-xl font-bold transition">
+              رد سريع: تذكير بالهدية
+            </button>
+          </div>
+
+          <textarea
+            id="reply-text-sedra"
+            rows="3"
+            placeholder="اكتبي ردك هون يا خوتة..."
+            class="w-full rounded-2xl border-2 border-rose-200 focus:border-rose-600 focus:outline-none p-3.5 text-sm font-medium bg-rose-50/30 text-gray-900 mb-3"
+          ></textarea>
+
+          <div class="flex flex-col sm:flex-row gap-2.5">
+            <button
+              type="button"
+              onclick="sendWhatsAppReply('sedra')"
+              class="flex-1 py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+              </svg>
+              <span>إرسال الرد عبر واتساب</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="copyReplyText('sedra')"
+              class="py-3.5 px-5 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-sm transition flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>نسخ الرد</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =====================================================
+         SECTION B: LILAS (قسم ليلاس - الهبلة)
+         ===================================================== -->
+    <div id="section-lilas" class="hidden space-y-6">
+
+      <!-- 4B. Lilas Password Lock Card -->
+      <div id="lock-lilas" class="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 shadow-lg border-2 border-pink-100 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-pink-50 border border-pink-200 mx-auto flex items-center justify-center text-pink-600 mb-4 shadow-sm">
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+
+        <span class="inline-block px-3 py-1 rounded-full bg-pink-100 text-pink-800 text-xs font-bold mb-2">
+          منطقة خاصة بليلاس فقط
+        </span>
+        <h2 class="text-xl sm:text-2xl font-black text-gray-900">
+          أهلاً بالهبلة ليلاس!
+        </h2>
+        <p class="text-sm text-gray-600 mt-1 max-w-sm mx-auto">
+          اكتبي كلمة السر الخاصة فيكِ عشان تفتحين رسالتك وتشوفين شهادتك الرسمية
+        </p>
+
+        <form onsubmit="event.preventDefault(); unlockSister('lilas');" class="mt-5 max-w-xs mx-auto space-y-3">
+          <div>
+            <input
+              id="input-pass-lilas"
+              type="text"
+              dir="ltr"
+              placeholder="2012/2/1"
+              autocomplete="off"
+              class="w-full text-center font-bold text-lg tracking-wider py-3 px-4 rounded-2xl border-2 border-pink-200 focus:border-pink-600 focus:outline-none bg-pink-50/40 text-gray-900 transition-colors"
+            />
+            <p class="text-xs text-gray-500 mt-2 font-medium">
+              تلميح: تاريخ ميلادك بالصيغة <span dir="ltr" class="font-bold text-pink-700">2012/2/1</span>
+            </p>
+          </div>
+
+          <p id="error-lilas" class="text-xs font-bold text-red-600 hidden">
+            كلمة السر غلط يا هبلة! ركزي واكتبي 2012/2/1
+          </p>
+
+          <button
+            type="submit"
+            class="w-full py-3.5 px-6 rounded-2xl bg-pink-600 hover:bg-pink-700 active:scale-95 text-white font-extrabold text-sm shadow-md shadow-pink-600/25 transition-all flex items-center justify-center gap-2"
+          >
+            <span>فتح قسم ليلاس</span>
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- 6. Lilas Unlocked Content -->
+      <div id="content-lilas" class="hidden space-y-6">
+
+        <!-- Custom SVG Avatar & Identity Header -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100 text-center relative overflow-hidden">
+          <div class="w-32 h-32 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-pink-100 via-pink-50 to-purple-50 border-2 border-pink-200 flex items-center justify-center shadow-inner relative">
+            <!-- Custom SVG Illustration: Creative Lilas (Calligraphy Pen, Sketchbook & Baby Roses) -->
+            <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="46" fill="#FCE7F3" />
+
+              <!-- Arabic Calligraphy Fountain Pen on left -->
+              <path d="M26 90L34 52L30 42L22 48L26 90Z" fill="#BE185D"/>
+              <polygon points="30,42 34,32 37,43" fill="#F59E0B"/>
+              <!-- Swirling Calligraphy Ink Ribbon -->
+              <path d="M34 30C48 16 74 16 88 30" stroke="#DB2777" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- Artist Palette on right -->
+              <ellipse cx="90" cy="70" rx="12" ry="16" transform="rotate(15 90 70)" fill="#FDE68A" stroke="#D97706" stroke-width="2"/>
+              <circle cx="88" cy="63" r="2.5" fill="#EC4899"/>
+              <circle cx="94" cy="69" r="2.5" fill="#3B82F6"/>
+              <circle cx="87" cy="75" r="2.5" fill="#10B981"/>
+
+              <!-- Cheerful Young Artist Girl Avatar Center -->
+              <circle cx="60" cy="64" r="22" fill="#FDE68A" stroke="#F59E0B" stroke-width="2"/>
+              <!-- Playful Hair with Baby Rose clip -->
+              <path d="M38 61C38 44 48 36 60 36C72 36 82 44 82 61C76 52 68 49 60 49C52 49 44 52 38 61Z" fill="#831843"/>
+              <circle cx="76" cy="46" r="5.5" fill="#F472B6"/>
+              <circle cx="76" cy="46" r="2.5" fill="#FDF2F8"/>
+
+              <!-- Sparkling Eyes -->
+              <circle cx="53" cy="62" r="2.5" fill="#1F2937"/>
+              <circle cx="67" cy="62" r="2.5" fill="#1F2937"/>
+              <!-- Rosy Cheeks -->
+              <circle cx="48" cy="67" r="3.5" fill="#F472B6" opacity="0.65"/>
+              <circle cx="72" cy="67" r="3.5" fill="#F472B6" opacity="0.65"/>
+              <!-- Big Playful Grin -->
+              <path d="M53 69C55.5 74 64.5 74 67 69" stroke="#9D174D" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-black text-gray-900">
+            ليلاس | اللقب الرسمي: الهبلة
+          </h2>
+
+          <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <!-- Key Trait Badge -->
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-pink-100 text-pink-800 border border-pink-200">
+              <svg class="w-4 h-4 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+              وسام الصفة الأبرز: مجنونة رسمياً — طاقة جنون وفن بوقت واحد
+            </span>
+
+            <!-- Grade 8 Status Badge -->
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-purple-100 text-purple-900 border border-purple-200">
+              <svg class="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              بطلة الصف الثامن
+            </span>
+          </div>
+        </div>
+
+        <!-- Personal Letter with Typewriter Effect -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-pink-100">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-pink-600"></span>
+              <h3 class="font-extrabold text-gray-900 text-lg">رسالتك الخاصة يا ليلاس</h3>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="startTypewriter('lilas', false)" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 border border-pink-200 transition">
+                إعادة كتابة
+              </button>
+              <button onclick="startTypewriter('lilas', true)" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                عرض الكامل
+              </button>
+            </div>
+          </div>
+
+          <div class="min-h-[150px] bg-pink-50/50 rounded-2xl p-4 sm:p-5 border border-pink-100">
+            <p id="typewriter-lilas" class="text-gray-800 text-base sm:text-lg leading-relaxed font-medium"></p>
+          </div>
+
+          <div class="mt-4 flex items-center justify-end">
+            <span class="text-xs font-black text-pink-800 bg-pink-100 px-3.5 py-1.5 rounded-full">
+              التوقيع: أخوكِ وتاج راسك 😎
+            </span>
+          </div>
+        </div>
+
+        <!-- Age Difference Counter (عداد فرق العمر والخبرة) -->
+        <div class="bg-gradient-to-br from-pink-600 to-rose-600 text-white rounded-3xl p-6 shadow-lg">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-extrabold flex items-center gap-2">
+              <svg class="w-5 h-5 text-pink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              عداد فرق العمر والأقدمية
+            </h3>
+            <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-bold" dir="ltr">
+              2006/10/7 vs 2012/2/1
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 my-4 text-center">
+            <div class="bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-2xl sm:text-3xl font-black">5 سنوات و 117 يوم</div>
+              <div class="text-xs text-pink-100 mt-1 font-medium">فرق العمر بالسنة واليوم</div>
+            </div>
+            <div class="bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-2xl sm:text-3xl font-black">1,943 يوم</div>
+              <div class="text-xs text-pink-100 mt-1 font-medium">إجمالي أيام الخبرة الزائدة</div>
+            </div>
+            <div class="col-span-2 sm:col-span-1 bg-white/15 backdrop-blur rounded-2xl p-3.5 border border-white/20">
+              <div class="text-xl sm:text-2xl font-black">5 سنوات و 3 أشهر و 25 يوم</div>
+              <div class="text-xs text-pink-100 mt-1 font-medium">التفصيل الدقيق للأقدمية</div>
+            </div>
+          </div>
+
+          <p class="text-xs sm:text-sm text-pink-100 font-bold text-center bg-black/15 rounded-xl py-2.5 px-3">
+            أكثر من خمس سنين فرق خبرة.. يعني كلامي أوامر وتوجيهاتي تدرس لأنك ما علمتيني شي أنا اللي علمتك!
+          </p>
+        </div>
+
+        <!-- Hobbies & Talents Card (مواهب الفنانة ليلاس) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100">
+          <h3 class="text-lg font-extrabold text-gray-900 mb-1 flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            مواهب الفنانة ليلاس
+          </h3>
+          <p class="text-xs text-gray-500 mb-4">لما تهدأ شوي وتمسك القلم تطلع إبداعات حقيقية</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Hobby 1: Drawing -->
+            <div class="p-5 rounded-2xl bg-pink-50/70 border border-pink-100 flex flex-col items-start">
+              <div class="w-12 h-12 rounded-xl bg-white border border-pink-200 flex items-center justify-center text-pink-600 mb-3 shadow-sm">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+              </div>
+              <h4 class="font-extrabold text-gray-900 text-base mb-1">الإبداع بالرسم</h4>
+              <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                خيال واسع ولمسة فنية بالرسم تثبت إنها فنانة حقيقية وموهوبة بالفطرة (وبتشجيعي طبعاً).
+              </p>
+            </div>
+
+            <!-- Hobby 2: Calligraphy -->
+            <div class="p-5 rounded-2xl bg-pink-50/70 border border-pink-100 flex flex-col items-start">
+              <div class="w-12 h-12 rounded-xl bg-white border border-pink-200 flex items-center justify-center text-pink-600 mb-3 shadow-sm">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </div>
+              <h4 class="font-extrabold text-gray-900 text-base mb-1">فن الخط</h4>
+              <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                كتابة مرتبة وخط أنيق يفتح النفس كأنها لوحة مرسومة بالمسطرة والقلم.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Flip Cards (أسباب تخليني فخور فيكِ) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-extrabold text-gray-900">أسباب تخليني فخور فيكِ</h3>
+              <p class="text-xs text-gray-500">اضغطي على أي بطاقة عشان تنقلب وتشوفين السبب</p>
+            </div>
+            <span class="text-xs font-bold text-pink-700 bg-pink-50 px-3 py-1 rounded-full border border-pink-200">
+              3 بطاقات تفاعلية
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <!-- Flip Card 1 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-pink-50 to-purple-50 border-2 border-pink-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-pink-600 text-white font-black text-sm flex items-center justify-center mb-2">1</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الأول: موهبة الرسم والخط</h4>
+                  <span class="mt-3 text-xs font-bold text-pink-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-pink-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأن عندك لمسة فنية بالرسم والخط تميزك عن الكل وتخليني أفتخر فيكِ وين ما كان.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flip Card 2 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-pink-50 to-purple-50 border-2 border-pink-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-pink-600 text-white font-black text-sm flex items-center justify-center mb-2">2</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الثاني: الجنون الإيجابي</h4>
+                  <span class="mt-3 text-xs font-bold text-pink-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-pink-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأن هبلك وجنونك العفوي يغير جو البيت كله ويخلينا نضحك من قلبنا مهما كنا مشغولين.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flip Card 3 -->
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front bg-gradient-to-br from-pink-50 to-purple-50 border-2 border-pink-200 shadow-sm">
+                  <span class="w-9 h-9 rounded-full bg-pink-600 text-white font-black text-sm flex items-center justify-center mb-2">3</span>
+                  <h4 class="font-extrabold text-gray-900 text-base">السبب الثالث: بطلة الصف الثامن</h4>
+                  <span class="mt-3 text-xs font-bold text-pink-600 underline">اضغطي لقلب البطاقة</span>
+                </div>
+                <div class="flip-card-back bg-pink-600 text-white shadow-md">
+                  <p class="text-sm font-bold leading-relaxed">
+                    لأنك عم تكبري وتجتهدي بدراستك بالصف الثامن وتثبتي كل يوم إنك قد المسؤولية.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate of Appreciation (شهادة تقدير رسمية لليلاس) -->
+        <div class="certificate-frame bg-white rounded-3xl p-6 sm:p-8 shadow-md border-4 border-double border-pink-300 text-center relative">
+          <div class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-pink-100 text-pink-800 text-xs font-extrabold mb-3">
+            شهادة تقدير أخوية معتمدة
+          </div>
+          <h3 class="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            وسام الشكر والإبداع الفني
+          </h3>
+          <p class="text-sm text-gray-600 mb-3">
+            يمنح هذا الوسام الفخري بكل فخر واعتزاز إلى الأخت:
+          </p>
+          <div class="inline-block px-6 py-2 rounded-2xl bg-pink-50 border border-pink-200 text-xl sm:text-2xl font-black text-pink-700 mb-3">
+            ليلاس الهبلة
+          </div>
+          <p class="font-serif text-base sm:text-lg text-gray-700 max-w-md mx-auto leading-relaxed">
+            وذلك لحصولها بجدارة على لقب <span class="font-bold text-pink-700">"أكبر فنانة بالرسم والخط ورئيسة قسم الجنون والوناسة بالبيت"</span>، مع أطيب الأمنيات بالتفوق في الصف الثامن.
+          </p>
+          <div class="mt-5 pt-4 border-t border-pink-100 flex items-center justify-between text-xs font-bold text-gray-600">
+            <span>الختم الرسمي: معتمد 100%</span>
+            <span class="text-pink-800 font-black">التوقيع: أخوكِ وتاج راسك 😎</span>
+          </div>
+        </div>
+
+        <!-- Heartfelt Prayer (دعاء خاص لليلاس) -->
+        <div class="bg-gradient-to-r from-pink-50 via-white to-pink-50 rounded-3xl p-6 shadow-sm border border-pink-200 text-center">
+          <span class="text-xs font-extrabold text-pink-700 uppercase tracking-wider">دعاء من القلب</span>
+          <p class="font-serif text-lg sm:text-xl text-gray-800 mt-2 leading-loose font-bold">
+            "اللهم وفق ليلاس في دراستها بالصف الثامن وفي كل مراحل حياتها، ونوّر بصيرتها، وزدها إبداعاً وتألقاً في فنها وخطها، واحفظ ابتسامتها وروحها الحلوة دائماً."
+          </p>
+        </div>
+
+        <!-- Live Birthday Countdown (العد التنازلي ليوم ميلاد ليلاس 1/2) -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100 text-center">
+          <span class="inline-block px-3 py-1 rounded-full bg-pink-100 text-pink-800 text-xs font-bold mb-2">
+            موعدنا يوم 1 فبراير (2012/2/1)
+          </span>
+          <h3 class="text-lg font-extrabold text-gray-900 mb-4">
+            العد التنازلي ليوم ميلادك القادم
+          </h3>
+
+          <div class="grid grid-cols-4 gap-2.5 max-w-md mx-auto mb-4">
+            <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3">
+              <div id="lilas-days" class="text-2xl sm:text-3xl font-black text-pink-700">0</div>
+              <div class="text-xs font-bold text-gray-600">يوم</div>
+            </div>
+            <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3">
+              <div id="lilas-hours" class="text-2xl sm:text-3xl font-black text-pink-700">0</div>
+              <div class="text-xs font-bold text-gray-600">ساعة</div>
+            </div>
+            <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3">
+              <div id="lilas-mins" class="text-2xl sm:text-3xl font-black text-pink-700">0</div>
+              <div class="text-xs font-bold text-gray-600">دقيقة</div>
+            </div>
+            <div class="bg-pink-50 border border-pink-200 rounded-2xl p-3">
+              <div id="lilas-secs" class="text-2xl sm:text-3xl font-black text-pink-700">0</div>
+              <div class="text-xs font-bold text-gray-600">ثانية</div>
+            </div>
+          </div>
+
+          <div class="bg-pink-600 text-white rounded-2xl p-3.5 text-xs sm:text-sm font-bold shadow-sm">
+            انتظري هديتك بيوم ميلادك.. (مع إني أنا أكبر جائزة بحياتك أصلاً ومو محتاجة غيري 😎)
+          </div>
+        </div>
+
+        <!-- Direct WhatsApp Reply Box for Lilas -->
+        <div class="bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-md border border-pink-100">
+          <h3 class="text-lg font-extrabold text-gray-900 mb-1">
+            ردي على أخوكِ وتاج راسك 😎
+          </h3>
+          <p class="text-xs text-gray-500 mb-3">
+            اكتبي ردك هون ورح يوصله مباشرة عالواتساب
+          </p>
+
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <button type="button" onclick="fillReply('lilas', 'أحلى مفاجأة بالدنيا! بس أنا فنانة لحالي مو أنت اللي علمتني 😂')" class="text-xs bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 px-3 py-1.5 rounded-xl font-bold transition">
+              رد سريع: أنا فنانة لحالي!
+            </button>
+            <button type="button" onclick="fillReply('lilas', 'شكراً يا تاج راسي، رح أرسم لك أحلى لوحة.. بس جهز هدية ميلادي 1/2!')" class="text-xs bg-pink-50 hover:bg-pink-100 text-pink-800 border border-pink-200 px-3 py-1.5 rounded-xl font-bold transition">
+              رد سريع: وعد اللوحة والهدية
+            </button>
+          </div>
+
+          <textarea
+            id="reply-text-lilas"
+            rows="3"
+            placeholder="اكتبي ردك هون يا هبلة..."
+            class="w-full rounded-2xl border-2 border-pink-200 focus:border-pink-600 focus:outline-none p-3.5 text-sm font-medium bg-pink-50/30 text-gray-900 mb-3"
+          ></textarea>
+
+          <div class="flex flex-col sm:flex-row gap-2.5">
+            <button
+              type="button"
+              onclick="sendWhatsAppReply('lilas')"
+              class="flex-1 py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+              </svg>
+              <span>إرسال الرد عبر واتساب</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="copyReplyText('lilas')"
+              class="py-3.5 px-5 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-sm transition flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>نسخ الرد</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Signature -->
+    <footer class="mt-12 text-center pb-6">
+      <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/90 border border-gray-200 shadow-sm text-sm font-black text-gray-800">
+        <span>صُنع بكل فخر ومزح من أخوكم وتاج راسكم 😎</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- =====================================================
+       JAVASCRIPT LOGIC
+       ===================================================== -->
+  <script>
+    // State Management
+    let currentSister = 'sedra'; // 'sedra' -> Mini Carnations | 'lilas' -> Baby Roses
+    const unlockedState = {
+      sedra: false,
+      lilas: false
+    };
+
+    const personalMessages = {
+      sedra: "يا سدرة يا خوتة.. أول شي هدي السرعة شوي واقرئي الرسالة عالبطيء، ما في شي راكض وراكي! حبيت أقولك شكراً لأنك أختي، صح إنك مستعجلة بكل شي بحياتك، بس بنفس الوقت ما شاء الله عليكِ بتاخذي من كل فن طرف وتبدعي فيه؛ من رسم لخياطة لحتى الورد اللي تسويه بأسياخ الحديد والقطن الملون ويطلع تحفة. طبعاً لا ننسى إن هالإبداع كله بفضل توجيهاتي لأنك ما علمتيني شي أنا اللي علمتك! هلق كلنا ناطرين مفاضلة الجامعة تبعك تخلص، وأنا متأكد أي فرع رح تدرسيه رح يكون محظوظ فيكِ.. بالتوفيق يا أحلى خوتة بالدنيا.",
+      lilas: "أهلاً بالهبلة الصغيرة ليلاس! طبعاً لساكِ بصف ثامن، يعني لسا قدامك مشوار طويل لتوصلي لمستوى خبرتي بالحياة، ولا تنسي إني أنا اللي علمتك كل شي! بس الصدق ينقال، رغم الجنون والهبل اللي مسوي جو بالبيت، لما تمسكين القلم والورقة تتحولين لفنانة حقيقية بالرسم والخط ما شاء الله عليكِ. شكراً لأنك آخر العنقود اللي ما نمل من سوالفها وجنونها، وشدي حيلك بدراستك بصف ثامن وخلي إبداعك دايماً عالي."
+    };
+
+    const typewriterTimers = {
+      sedra: null,
+      lilas: null
+    };
+
+    // 1. Open Interactive 3D Envelope
+    let envelopeOpened = false;
+    function openEnvelope() {
+      if (envelopeOpened) return;
+      envelopeOpened = true;
+
+      const envBox = document.getElementById('envelope-box');
+      const splash = document.getElementById('splash-screen');
+      const mainApp = document.getElementById('main-app');
+
+      envBox.classList.add('open');
+
+      setTimeout(() => {
+        splash.classList.add('opacity-0', 'pointer-events-none');
+        mainApp.classList.remove('opacity-0');
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 700);
+      }, 950);
+    }
+
+    // 2. Switch Between Sisters (Sedra vs Lilas)
+    function switchSister(sister) {
+      currentSister = sister;
+      const tabSedra = document.getElementById('tab-sedra');
+      const tabLilas = document.getElementById('tab-lilas');
+      const secSedra = document.getElementById('section-sedra');
+      const secLilas = document.getElementById('section-lilas');
+      const indicatorText = document.getElementById('flower-indicator-text');
+
+      if (sister === 'sedra') {
+        document.body.classList.remove('theme-lilas');
+        secSedra.classList.remove('hidden');
+        secLilas.classList.add('hidden');
+
+        tabSedra.className = "flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-rose-600 text-white shadow-md shadow-rose-600/25";
+        tabLilas.className = "flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 text-gray-600 hover:bg-pink-50";
+
+        indicatorText.textContent = "تساقط زهور ميني قرنفل لسدرة";
+      } else {
+        document.body.classList.add('theme-lilas');
+        secLilas.classList.remove('hidden');
+        secSedra.classList.add('hidden');
+
+        tabLilas.className = "flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 bg-pink-600 text-white shadow-md shadow-pink-600/25";
+        tabSedra.className = "flex-1 py-3 px-3 rounded-xl font-extrabold text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 text-gray-600 hover:bg-rose-50";
+
+        indicatorText.textContent = "تساقط زهور بيبي روز لليلاس";
+      }
+    }
+
+    // 3. Normalize Arabic-Indic digits & flexible date password check
+    function normalizeDigits(str) {
+      const arabicIndic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      const easternArabic = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      let out = (str || '').trim();
+      for (let i = 0; i < 10; i++) {
+        out = out.replace(new RegExp(arabicIndic[i], 'g'), i)
+                 .replace(new RegExp(easternArabic[i], 'g'), i);
+      }
+      return out.replace(/\s+/g, '');
+    }
+
+    function isValidPassword(sister, rawInput) {
+      const cleaned = normalizeDigits(rawInput);
+      const parts = cleaned.split(/[\/\-\.\_]/).filter(Boolean);
+
+      if (sister === 'sedra') {
+        // Target: 2008/1/10
+        if (cleaned === '2008110' || cleaned === '20080110' || cleaned === '1012008' || cleaned === '10012008') {
+          return true;
+        }
+        if (parts.length === 3) {
+          const nums = parts.map(Number);
+          // YYYY/M/D (2008/1/10) or D/M/YYYY (10/1/2008)
+          if (nums[0] === 2008 && nums[1] === 1 && nums[2] === 10) return true;
+          if (nums[2] === 2008 && nums[1] === 1 && nums[0] === 10) return true;
+        }
+        return false;
+      } else {
+        // Target: 2012/2/1
+        if (cleaned === '201221' || cleaned === '20120201' || cleaned === '122012' || cleaned === '01022012') {
+          return true;
+        }
+        if (parts.length === 3) {
+          const nums = parts.map(Number);
+          // YYYY/M/D (2012/2/1) or D/M/YYYY (1/2/2012)
+          if (nums[0] === 2012 && nums[1] === 2 && nums[2] === 1) return true;
+          if (nums[2] === 2012 && nums[1] === 2 && nums[0] === 1) return true;
+        }
+        return false;
+      }
+    }
+
+    function unlockSister(sister) {
+      const inputEl = document.getElementById(`input-pass-${sister}`);
+      const errorEl = document.getElementById(`error-${sister}`);
+      const lockCard = document.getElementById(`lock-${sister}`);
+      const contentBox = document.getElementById(`content-${sister}`);
+
+      if (isValidPassword(sister, inputEl.value)) {
+        unlockedState[sister] = true;
+        errorEl.classList.add('hidden');
+        lockCard.classList.add('hidden');
+        contentBox.classList.remove('hidden');
+        startTypewriter(sister, false);
+        showToast(sister === 'sedra' ? 'أهلاً بسدرة الخوتة! تم فتح قسمك بنجاح' : 'أهلاً بليلاس الهبلة! تم فتح قسمك بنجاح');
+      } else {
+        errorEl.classList.remove('hidden');
+        lockCard.classList.remove('shake-error');
+        void lockCard.offsetWidth; // trigger reflow
+        lockCard.classList.add('shake-error');
+      }
+    }
+
+    // 4. Typewriter Effect for Sister Letters
+    function startTypewriter(sister, instant) {
+      if (typewriterTimers[sister]) {
+        clearInterval(typewriterTimers[sister]);
+        typewriterTimers[sister] = null;
+      }
+
+      const targetEl = document.getElementById(`typewriter-${sister}`);
+      const fullText = personalMessages[sister];
+
+      if (instant) {
+        targetEl.textContent = fullText;
+        return;
+      }
+
+      targetEl.innerHTML = '';
+      const textSpan = document.createElement('span');
+      const cursorSpan = document.createElement('span');
+      cursorSpan.className = 'typewriter-cursor';
+      targetEl.appendChild(textSpan);
+      targetEl.appendChild(cursorSpan);
+
+      let index = 0;
+      typewriterTimers[sister] = setInterval(() => {
+        if (index < fullText.length) {
+          textSpan.textContent += fullText.charAt(index);
+          index++;
+        } else {
+          clearInterval(typewriterTimers[sister]);
+          typewriterTimers[sister] = null;
+          setTimeout(() => {
+            if (cursorSpan.parentNode) cursorSpan.remove();
+          }, 1200);
+        }
+      }, 28);
+    }
+
+    // 5. Live Birthday Countdowns (Sedra: Jan 10, Lilas: Feb 1)
+    function getNextBirthdayTimestamp(month, day) {
+      const now = new Date();
+      let year = now.getFullYear();
+      let nextBday = new Date(year, month - 1, day, 0, 0, 0);
+      if (now >= nextBday) {
+        nextBday = new Date(year + 1, month - 1, day, 0, 0, 0);
+      }
+      return nextBday.getTime() - now.getTime();
+    }
+
+    function updateBirthdayCountdowns() {
+      // Sedra: January 10 (month 1, day 10)
+      const diffSedra = Math.max(0, getNextBirthdayTimestamp(1, 10));
+      document.getElementById('sedra-days').textContent = Math.floor(diffSedra / (1000 * 60 * 60 * 24));
+      document.getElementById('sedra-hours').textContent = Math.floor((diffSedra / (1000 * 60 * 60)) % 24);
+      document.getElementById('sedra-mins').textContent = Math.floor((diffSedra / 1000 / 60) % 60);
+      document.getElementById('sedra-secs').textContent = Math.floor((diffSedra / 1000) % 60);
+
+      // Lilas: February 1 (month 2, day 1)
+      const diffLilas = Math.max(0, getNextBirthdayTimestamp(2, 1));
+      document.getElementById('lilas-days').textContent = Math.floor(diffLilas / (1000 * 60 * 60 * 24));
+      document.getElementById('lilas-hours').textContent = Math.floor((diffLilas / (1000 * 60 * 60)) % 24);
+      document.getElementById('lilas-mins').textContent = Math.floor((diffLilas / 1000 / 60) % 60);
+      document.getElementById('lilas-secs').textContent = Math.floor((diffLilas / 1000) % 60);
+    }
+
+    // 6. WhatsApp Reply & Clipboard Copy
+    function fillReply(sister, text) {
+      const textarea = document.getElementById(`reply-text-${sister}`);
+      textarea.value = text;
+      textarea.focus();
+    }
+
+    function getFormattedReply(sister) {
+      const raw = document.getElementById(`reply-text-${sister}`).value.trim();
+      const prefix = sister === 'sedra' ? 'رد من سدرة (الخوتة) عالموقع:' : 'رد من ليلاس (الهبلة) عالموقع:';
+      const body = raw || (sister === 'sedra' ? 'شفت الموقع الرهيب يا تاج راسي! شكراً كثير ❤️' : 'شفت الموقع الحلو يا تاج راسي! شكراً كثير ❤️');
+      return `${prefix}\n"${body}"`;
+    }
+
+    function sendWhatsAppReply(sister) {
+      const message = getFormattedReply(sister);
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    function copyReplyText(sister) {
+      const message = getFormattedReply(sister);
+      const tempInput = document.createElement('textarea');
+      tempInput.value = message;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast('تم نسخ ردك! الصقيه في محادثة أخوكِ');
+      } catch (err) {
+        showToast('تم تجهيز النص للنسخ');
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notification');
+      const text = document.getElementById('toast-text');
+      text.textContent = msg;
+      toast.classList.remove('opacity-0', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-4');
+      }, 2800);
+    }
+
+    // =====================================================
+    // 7. HTML5 CANVAS FALLING FLOWERS
+    //    - Sedra: Mini Carnations (زهور ميني قرنفل مشرشرة)
+    //    - Lilas: Baby Roses (زهور بيبي روز ناعمة)
+    // =====================================================
+    const canvas = document.getElementById('flower-canvas');
+    const ctx = canvas.getContext('2d');
+    let flowers = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createFlowerParticle(randomY = false) {
+      const isMobile = window.innerWidth < 640;
+      return {
+        x: Math.random() * canvas.width,
+        y: randomY ? Math.random() * canvas.height : -30,
+        size: (isMobile ? 9 : 11) + Math.random() * 7,
+        speedY: 0.65 + Math.random() * 1.1,
+        speedX: (Math.random() - 0.5) * 0.6,
+        swayAmp: 0.4 + Math.random() * 0.8,
+        swaySpeed: 0.01 + Math.random() * 0.02,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.018,
+        opacity: 0.55 + Math.random() * 0.35,
+        hueVariant: Math.floor(Math.random() * 3)
+      };
+    }
+
+    function initFlowers() {
+      resizeCanvas();
+      const count = window.innerWidth < 640 ? 22 : 36;
+      flowers = [];
+      for (let i = 0; i < count; i++) {
+        flowers.push(createFlowerParticle(true));
+      }
+    }
+
+    // Draw a Ruffled Mini Carnation (ميني قرنفل) for Sedra
+    function drawMiniCarnation(ctx, p) {
+      const outerColors = ['#fb7185', '#f43f5e', '#fda4af'];
+      const innerColors = ['#e11d48', '#be123c', '#f43f5e'];
+      const outer = outerColors[p.hueVariant];
+      const inner = innerColors[p.hueVariant];
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.globalAlpha = p.opacity;
+
+      // Serrated ruffled outer petals
+      const numPetals = 10;
+      ctx.fillStyle = outer;
+      for (let i = 0; i < numPetals; i++) {
+        ctx.save();
+        ctx.rotate((Math.PI * 2 * i) / numPetals);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-p.size * 0.28, -p.size * 0.85);
+        ctx.lineTo(-p.size * 0.08, -p.size * 0.72);
+        ctx.lineTo(0, -p.size);
+        ctx.lineTo(p.size * 0.08, -p.size * 0.72);
+        ctx.lineTo(p.size * 0.28, -p.size * 0.85);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Inner ruffled layer
+      ctx.fillStyle = inner;
+      for (let i = 0; i < 6; i++) {
+        ctx.save();
+        ctx.rotate((Math.PI * 2 * i) / 6 + 0.3);
+        ctx.beginPath();
+        ctx.arc(0, -p.size * 0.32, p.size * 0.26, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Warm center dot
+      ctx.fillStyle = '#fff1f2';
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size * 0.16, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // Draw a Delicate Baby Rose (بيبي روز) for Lilas
+    function drawBabyRose(ctx, p) {
+      const petalColors = ['#f9a8d4', '#f472b6', '#fbcfe8'];
+      const coreColors = ['#db2777', '#ec4899', '#be185d'];
+      const petal = petalColors[p.hueVariant];
+      const core = coreColors[p.hueVariant];
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.globalAlpha = p.opacity;
+
+      // Small green sepal leaf hint
+      ctx.fillStyle = '#86efac';
+      ctx.beginPath();
+      ctx.ellipse(p.size * 0.55, p.size * 0.55, p.size * 0.35, p.size * 0.16, Math.PI / 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 5 rounded outer rose petals
+      ctx.fillStyle = petal;
+      for (let i = 0; i < 5; i++) {
+        ctx.save();
+        ctx.rotate((Math.PI * 2 * i) / 5);
+        ctx.beginPath();
+        ctx.arc(0, -p.size * 0.42, p.size * 0.44, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Inner rosebud swirl
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size * 0.42, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Delicate spiral highlight inside the baby rosebud
+      ctx.strokeStyle = '#fdf2f8';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size * 0.22, 0, Math.PI * 1.45);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function animateFlowers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < flowers.length; i++) {
+        const p = flowers[i];
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.angle) * p.swayAmp;
+        p.angle += p.spin;
+
+        if (currentSister === 'sedra') {
+          drawMiniCarnation(ctx, p);
+        } else {
+          drawBabyRose(ctx, p);
+        }
+
+        if (p.y > canvas.height + 35) {
+          flowers[i] = createFlowerParticle(false);
+        }
+        if (p.x > canvas.width + 35) p.x = -25;
+        if (p.x < -35) p.x = canvas.width + 25;
+      }
+
+      requestAnimationFrame(animateFlowers);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    window.onload = function () {
+      initFlowers();
+      animateFlowers();
+      updateBirthdayCountdowns();
+      setInterval(updateBirthdayCountdowns, 1000);
+    };
+  </script>
+</body>
+</html>
